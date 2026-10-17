@@ -1,5 +1,5 @@
 #include "shapes.hpp"
-#include <cmath>
+
 namespace muh = muhamadiarov;
 
 muh::Circle::Circle(size_t r, Point p):

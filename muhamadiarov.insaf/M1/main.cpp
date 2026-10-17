@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <utility>
 #include "shapes.hpp"
+#include "monte_carlo.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -49,7 +51,7 @@ int main(int argc, char* argv[])
     return 1;
   }
   namespace muh = muhamadiarov;
-  std::vector< std::unique_ptr< muh::Shape > > shapes;
+  std::vector< std::unique_ptr< muh::Circle > > shapes;
   double r = 0;
   int n = 0; 
   double x = 0;
@@ -63,5 +65,7 @@ int main(int argc, char* argv[])
     std::cerr << "invalid input\n";
     return 1;
   }
+  std::pair< double, double > results = getAreas(shapes, threads, tries, seed);
+  std::cout << results.first << ' ' << results.second << '\n'; 
   return 0;
 }

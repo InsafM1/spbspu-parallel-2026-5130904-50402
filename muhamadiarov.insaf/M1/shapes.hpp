@@ -1,5 +1,6 @@
 #ifndef SHAPES_HPP
 #define SHAPES_HPP
+#include <cmath>
 
 namespace muhamadiarov
 {
@@ -8,21 +9,14 @@ namespace muhamadiarov
     double x, y;
   };
 
-  class Shape
-  {
-  public:
-    virtual ~Shape() = default;
-    virtual bool isInside(Point p) const noexcept = 0;
-  };
-
-  class Circle final: public Shape
+  class Circle
   {
   public:
     Circle(double r, Point p);
-    bool isInside(Point p) const noexcept override;  
+    bool isInside(Point p) const noexcept;  
   private:
     double r_;
-    Point p_;
+    double p_;
   };
 }
 #endif
