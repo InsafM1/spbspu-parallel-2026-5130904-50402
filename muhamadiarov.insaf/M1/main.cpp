@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <memory>
+#include "shapes.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -43,6 +46,21 @@ int main(int argc, char* argv[])
   catch (const std::out_of_range&)
   {
     std::cerr << "numberical values of arguments exceed the permissible limit\n";
+    return 1;
+  }
+  namespace muh = muhamadiarov;
+  std::vector< std::unique_ptr< muh::Shape > > shapes;
+  double r = 0;
+  int n = 0; 
+  double x = 0;
+  double y = 0;
+  while (std::cin >> r >> n >> x >> y)
+  {
+    shapes.push_back(std::make_unique< muh::Circle >(r, muh::Point{x, y}));
+  }
+  if (!std::cin)
+  {
+    std::cerr << "invalid input\n";
     return 1;
   }
   return 0;
