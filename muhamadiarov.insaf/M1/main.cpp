@@ -1,12 +1,14 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <memory>
-#include <utility>
-#include "shapes.hpp"
 #include "monte_carlo.hpp"
+#include "shapes.hpp"
+#include <cstddef>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
   if (argc != 3 && argc != 4)
   {
@@ -23,8 +25,13 @@ int main(int argc, char* argv[])
   size_t seed = 0;
   try
   {
-    threads= std::stoull(argv[1]);
+    threads = std::stoull(argv[1]);
     tries = std::stoull(argv[2]);
+    if (tries == 0)
+    {
+      std::cerr << "the number of tries must be positive\n";
+      return 1;
+    }
     if (argc == 4)
     {
       if (argv[3][0] == '-')
@@ -40,25 +47,26 @@ int main(int argc, char* argv[])
       }
     }
   }
-  catch (const std::invalid_argument&)
+  catch (const std::invalid_argument &)
   {
     std::cerr << "arguments aren't numbers\n";
     return 1;
   }
-  catch (const std::out_of_range&)
+  catch (const std::out_of_range &)
   {
-    std::cerr << "numberical values of arguments exceed the permissible limit\n";
+    std::cerr
+        << "numberical values of arguments exceed the permissible limit\n";
     return 1;
   }
   namespace muh = muhamadiarov;
-  std::vector< std::unique_ptr< muh::Circle > > shapes;
+  std::vector<std::unique_ptr<muh::Circle>> shapes;
   double r = 0;
   int n = 0;
   double x = 0;
   double y = 0;
   while (std::cin >> r >> n >> x >> y)
   {
-    shapes.push_back(std::make_unique< muh::Circle >(r, muh::Point{x, y}));
+    shapes.push_back(std::make_unique<muh::Circle>(r, muh::Point{x, y}));
   }
   if (!std::cin.eof() && std::cin.fail())
   {
@@ -70,7 +78,8 @@ int main(int argc, char* argv[])
     std::cout << 0.0 << ' ' << 0.0 << '\n';
     return 0;
   }
-  std::pair< double, double > results = getAreas(shapes, threads, tries, seed);
+  const std::pair<double, double> results =
+      getAreas(shapes, threads, tries, seed);
   std::cout << results.first << ' ' << results.second << '\n';
   return 0;
 }

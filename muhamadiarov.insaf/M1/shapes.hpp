@@ -6,7 +6,8 @@ namespace muhamadiarov
 {
   struct Point
   {
-    double x, y;
+    double x;
+    double y;
   };
 
   class Circle
@@ -18,6 +19,7 @@ namespace muhamadiarov
     double getMinX() const noexcept;
     double getMaxY() const noexcept;
     double getMinY() const noexcept;
+
   private:
     double r_;
     Point p_;
