@@ -60,10 +60,15 @@ int main(int argc, char* argv[])
   {
     shapes.push_back(std::make_unique< muh::Circle >(r, muh::Point{x, y}));
   }
-  if (!std::cin)
+  if (!std::cin.eof() && std::cin.fail())
   {
     std::cerr << "invalid input\n";
     return 1;
+  }
+  if (shapes.empty())
+  {
+    std::cout << 0.0 << ' ' << 0.0 << '\n';
+    return 0;
   }
   std::pair< double, double > results = getAreas(shapes, threads, tries, seed);
   std::cout << results.first << ' ' << results.second << '\n'; 

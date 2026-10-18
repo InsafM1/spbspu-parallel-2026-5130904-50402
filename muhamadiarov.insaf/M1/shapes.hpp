@@ -20,7 +20,7 @@ namespace muhamadiarov
     double getMinY() const noexcept;
   private:
     double r_;
-    double p_;
+    Point p_;
   };
 }
 #endif

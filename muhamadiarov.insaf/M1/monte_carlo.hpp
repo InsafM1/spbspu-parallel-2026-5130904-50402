@@ -6,6 +6,8 @@
 #include <utility>
 #include <random>
 #include <cstddef>
+#include <future>
+#include <algorithm>
 
 namespace muhamadiarov
 {
