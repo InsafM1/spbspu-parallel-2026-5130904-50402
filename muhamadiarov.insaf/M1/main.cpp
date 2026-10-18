@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     threads= std::stoull(argv[1]);
     tries = std::stoull(argv[2]);
     if (argc == 4)
-    {    
+    {
       if (argv[3][0] == '-')
       {
         std::cerr << "arguments must be non-negative numbers\n";
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
   namespace muh = muhamadiarov;
   std::vector< std::unique_ptr< muh::Circle > > shapes;
   double r = 0;
-  int n = 0; 
+  int n = 0;
   double x = 0;
   double y = 0;
   while (std::cin >> r >> n >> x >> y)
@@ -71,6 +71,6 @@ int main(int argc, char* argv[])
     return 0;
   }
   std::pair< double, double > results = getAreas(shapes, threads, tries, seed);
-  std::cout << results.first << ' ' << results.second << '\n'; 
+  std::cout << results.first << ' ' << results.second << '\n';
   return 0;
 }
