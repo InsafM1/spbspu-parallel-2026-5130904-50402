@@ -13,7 +13,11 @@ namespace muhamadiarov
   {
   public:
     Circle(double r, Point p);
-    bool isInside(Point p) const noexcept;  
+    bool isInside(Point p) const noexcept;
+    double getMaxX() const noexcept;
+    double getMinX() const noexcept;
+    double getMaxY() const noexcept;
+    double getMinY() const noexcept;
   private:
     double r_;
     double p_;
