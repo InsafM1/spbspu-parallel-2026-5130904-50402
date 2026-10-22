@@ -3,9 +3,9 @@
 #include <future>
 #include <random>
 #include <cstddef>
-#include <memory>
 #include <utility>
 #include <vector>
+#include <functional>
 
 namespace muhamadiarov
 {
@@ -97,8 +97,8 @@ std::pair< double, double > muh::getAreas(
   {
     x_min = x_max;
     x_max += step;
-    futures.push_back(std::async(std::launch::async, muh::getCountOfPoints, std::ref(shapes),
-        count_of_tries_for_thread, seed, x_max, x_min, y_max, y_min));
+    futures.push_back(std::async(std::launch::async, muh::getCountOfPoints, std::ref(shapes), count_of_tries_for_thread,
+        seed, x_max, x_min, y_max, y_min));
   }
   x_min = muh::getMinXAmongShapes(shapes);
   x_max = x_min + step;

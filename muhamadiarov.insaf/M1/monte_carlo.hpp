@@ -9,7 +9,6 @@
 namespace muhamadiarov
 {
   using circle_t = std::vector< std::unique_ptr< Circle > >;
-  std::pair< double, double > getAreas(
-      const circle_t &shapes, size_t threads, size_t tries, size_t seed);
+  std::pair< double, double > getAreas(const circle_t &shapes, size_t threads, size_t tries, size_t seed);
 }
 #endif
