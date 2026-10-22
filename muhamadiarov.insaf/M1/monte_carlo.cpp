@@ -5,15 +5,13 @@
 
 namespace muhamadiarov
 {
-  std::pair<size_t, size_t> getCountOfPoints(const circle_t &shapes, const size_t tries,
-                                            const size_t seed, const double xMax,
-                                            const double xMin, const double yMax,
-                                            const double yMin)
+  std::pair< size_t, size_t > getCountOfPoints(const circle_t &shapes, const size_t tries, const size_t seed,
+      const double xMax, const double xMin, const double yMax, const double yMin)
   {
     std::default_random_engine gen(seed);
-    std::uniform_real_distribution<double> distX(xMin, xMax);
-    std::uniform_real_distribution<double> distY(yMin, yMax);
-    std::pair<size_t, size_t> results{0, 0};
+    std::uniform_real_distribution< double > distX(xMin, xMax);
+    std::uniform_real_distribution< double > distY(yMin, yMax);
+    std::pair< size_t, size_t > results{0, 0};
     for (size_t i = 0; i < tries; ++i)
     {
       double x = distX(gen);
@@ -74,46 +72,42 @@ namespace muhamadiarov
     }
     return result;
   }
-}
 
-namespace muh = muhamadiarov;
+  namespace muh = muhamadiarov;
 
-std::pair<double, double> muh::getAreas(const muh::circle_t &shapes,
-                                        const size_t threads, const size_t tries,
-                                        const size_t seed)
-{
-  std::pair<double, double> results = {0.0, 0.0};
-  const size_t countOfTriesForThread = tries / (threads + 1);
-  const size_t remainingOnes = tries % (threads + 1);
-  std::vector<std::future<std::pair<size_t, size_t>>> futures;
-  const double yMax = muh::getMaxYAmongShapes(shapes);
-  const double yMin = muh::getMinYAmongShapes(shapes);
-  double xMax = muh::getMaxXAmongShapes(shapes);
-  double xMin = muh::getMinXAmongShapes(shapes);
-  const double step = (xMax - xMin) / (threads + 1);
-  xMax = xMin + step;
-  for (size_t i = 1; i < threads + 1; ++i)
+  std::pair< double, double > muh::getAreas(
+      const muh::circle_t &shapes, const size_t threads, const size_t tries, const size_t seed)
   {
-    xMin = xMax;
-    xMax += step;
-    futures.push_back(std::async(std::launch::async, muh::getCountOfPoints,
-                                 std::ref(shapes), countOfTriesForThread, seed,
-                                 xMax, xMin, yMax, yMin));
+    std::pair< double, double > results = {0.0, 0.0};
+    const size_t countOfTriesForThread = tries / (threads + 1);
+    const size_t remainingOnes = tries % (threads + 1);
+    std::vector< std::future< std::pair< size_t, size_t > > > futures;
+    const double yMax = muh::getMaxYAmongShapes(shapes);
+    const double yMin = muh::getMinYAmongShapes(shapes);
+    double xMax = muh::getMaxXAmongShapes(shapes);
+    double xMin = muh::getMinXAmongShapes(shapes);
+    const double step = (xMax - xMin) / (threads + 1);
+    xMax = xMin + step;
+    for (size_t i = 1; i < threads + 1; ++i)
+    {
+      xMin = xMax;
+      xMax += step;
+      futures.push_back(std::async(std::launch::async, muh::getCountOfPoints, std::ref(shapes), countOfTriesForThread,
+          seed, xMax, xMin, yMax, yMin));
+    }
+    xMin = muh::getMinXAmongShapes(shapes);
+    xMax = xMin + step;
+    std::pair< size_t, size_t > count
+        = muh::getCountOfPoints(shapes, countOfTriesForThread + remainingOnes, seed, xMax, xMin, yMax, yMin);
+    for (size_t i = 0; i < threads; ++i)
+    {
+      std::pair< size_t, size_t > r = futures[i].get();
+      count.first += r.first;
+      count.second += r.second;
+    }
+    xMax = muh::getMaxXAmongShapes(shapes);
+    const double boxArea = (yMax - yMin) * (xMax - xMin);
+    results.first = boxArea * static_cast< double >(count.first) / tries;
+    results.second = boxArea * static_cast< double >(count.second) / tries;
+    return results;
   }
-  xMin = muh::getMinXAmongShapes(shapes);
-  xMax = xMin + step;
-  std::pair<size_t, size_t> count =
-      muh::getCountOfPoints(shapes, countOfTriesForThread + remainingOnes, seed,
-                            xMax, xMin, yMax, yMin);
-  for (size_t i = 0; i < threads; ++i)
-  {
-    std::pair<size_t, size_t> r = futures[i].get();
-    count.first += r.first;
-    count.second += r.second;
-  }
-  xMax = muh::getMaxXAmongShapes(shapes);
-  const double boxArea = (yMax - yMin) * (xMax - xMin);
-  results.first = boxArea * static_cast<double>(count.first) / tries;
-  results.second = boxArea * static_cast<double>(count.second) / tries;
-  return results;
-}

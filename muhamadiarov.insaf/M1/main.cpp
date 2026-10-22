@@ -54,19 +54,18 @@ int main(int argc, char *argv[])
   }
   catch (const std::out_of_range &)
   {
-    std::cerr
-        << "numberical values of arguments exceed the permissible limit\n";
+    std::cerr << "numberical values of arguments exceed the permissible limit\n";
     return 1;
   }
   namespace muh = muhamadiarov;
-  std::vector<std::unique_ptr<muh::Circle>> shapes;
+  std::vector< std::unique_ptr< muh::Circle > > shapes;
   double r = 0;
   int n = 0;
   double x = 0;
   double y = 0;
   while (std::cin >> r >> n >> x >> y)
   {
-    shapes.push_back(std::make_unique<muh::Circle>(r, muh::Point{x, y}));
+    shapes.push_back(std::make_unique< muh::Circle >(r, muh::Point{x, y}));
   }
   if (!std::cin.eof() && std::cin.fail())
   {
@@ -78,8 +77,7 @@ int main(int argc, char *argv[])
     std::cout << 0.0 << ' ' << 0.0 << '\n';
     return 0;
   }
-  const std::pair<double, double> results =
-      getAreas(shapes, threads, tries, seed);
+  const std::pair< double, double > results = getAreas(shapes, threads, tries, seed);
   std::cout << results.first << ' ' << results.second << '\n';
   return 0;
 }
