@@ -9,7 +9,7 @@
 
 namespace muhamadiarov
 {
-  std::pair< size_t, size_t > getCountOfPoints(const circle_t &shapes, const size_t tries, const size_t seed,
+  std::pair< size_t, size_t > getCountOfPoints(const shape_t &shapes, const size_t tries, const size_t seed,
       const double x_max, const double x_min, const double y_max, const double y_min)
   {
     std::default_random_engine gen(seed);
@@ -40,7 +40,7 @@ namespace muhamadiarov
     }
     return results;
   }
-  double getMaxYAmongShapes(const circle_t &shapes)
+  double getMaxYAmongShapes(const shape_t &shapes)
   {
     double result = shapes[0]->getMaxY();
     for (size_t i = 1; i < shapes.size(); ++i)
@@ -49,7 +49,7 @@ namespace muhamadiarov
     }
     return result;
   }
-  double getMinYAmongShapes(const circle_t &shapes)
+  double getMinYAmongShapes(const shape_t &shapes)
   {
     double result = shapes[0]->getMinY();
     for (size_t i = 1; i < shapes.size(); ++i)
@@ -58,7 +58,7 @@ namespace muhamadiarov
     }
     return result;
   }
-  double getMaxXAmongShapes(const circle_t &shapes)
+  double getMaxXAmongShapes(const shape_t &shapes)
   {
     double result = shapes[0]->getMaxX();
     for (size_t i = 1; i < shapes.size(); ++i)
@@ -67,7 +67,7 @@ namespace muhamadiarov
     }
     return result;
   }
-  double getMinXAmongShapes(const circle_t &shapes)
+  double getMinXAmongShapes(const shape_t &shapes)
   {
     double result = shapes[0]->getMinX();
     for (size_t i = 1; i < shapes.size(); ++i)
@@ -81,7 +81,7 @@ namespace muhamadiarov
 namespace muh = muhamadiarov;
 
 std::pair< double, double > muh::getAreas(
-    const muh::circle_t &shapes, const size_t threads, const size_t tries, const size_t seed)
+    const muh::shape_t &shapes, const size_t threads, const size_t tries, const size_t seed)
 {
   std::pair< double, double > results = {0.0, 0.0};
   const size_t count_of_tries_for_thread = tries / (threads + 1);

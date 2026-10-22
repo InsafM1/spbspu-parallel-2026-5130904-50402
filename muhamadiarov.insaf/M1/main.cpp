@@ -58,14 +58,21 @@ int main(int argc, char *argv[])
     return 1;
   }
   namespace muh = muhamadiarov;
-  std::vector< std::unique_ptr< muh::Circle > > shapes;
-  double r = 0;
-  int n = 0;
+  std::vector< std::unique_ptr< muh::Shape > > shapes;
+  double hr = 0;
+  int vr = 0;
   double x = 0;
   double y = 0;
-  while (std::cin >> r >> n >> x >> y)
+  while (std::cin >> hr >> vr >> x >> y)
   {
-    shapes.push_back(std::make_unique< muh::Circle >(r, muh::Point{x, y}));
+    if (vr)
+    {
+      shapes.push_back(std::make_unique< muh::Ellipse >(hr, vr, muh::Point{x, y}));
+    }
+    else
+    {
+      shapes.push_back(std::make_unique< muh::Circle >(hr, muh::Point{x, y}));
+    }
   }
   if (!std::cin.eof() && std::cin.fail())
   {
