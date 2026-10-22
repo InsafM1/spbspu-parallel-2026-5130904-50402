@@ -1,6 +1,5 @@
 #ifndef SHAPES_HPP
 #define SHAPES_HPP
-#include <cmath>
 
 namespace muhamadiarov
 {

@@ -2,34 +2,38 @@
 #include <algorithm>
 #include <future>
 #include <random>
+#include <cstddef>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace muhamadiarov
 {
   std::pair< size_t, size_t > getCountOfPoints(const circle_t &shapes, const size_t tries, const size_t seed,
-      const double xMax, const double xMin, const double yMax, const double yMin)
+      const double x_max, const double x_min, const double y_max, const double y_min)
   {
     std::default_random_engine gen(seed);
-    std::uniform_real_distribution< double > distX(xMin, xMax);
-    std::uniform_real_distribution< double > distY(yMin, yMax);
+    std::uniform_real_distribution< double > dist_x(x_min, x_max);
+    std::uniform_real_distribution< double > dist_y(y_min, y_max);
     std::pair< size_t, size_t > results{0, 0};
     for (size_t i = 0; i < tries; ++i)
     {
-      double x = distX(gen);
-      double y = distY(gen);
-      size_t countOfShapes = 0;
+      const double x = dist_x(gen);
+      const double y = dist_y(gen);
+      size_t count_of_shapes = 0;
       for (size_t j = 0; j < shapes.size(); ++j)
       {
-        if (shapes[j]->isInside({x, y}) && !countOfShapes)
+        if (shapes[j]->isInside({x, y}) && !count_of_shapes)
         {
           results.first += 1;
-          countOfShapes = 1;
+          count_of_shapes = 1;
         }
         else if (shapes[j]->isInside({x, y}))
         {
-          countOfShapes += 1;
+          count_of_shapes += 1;
         }
       }
-      if (countOfShapes == shapes.size())
+      if (count_of_shapes == shapes.size())
       {
         results.second += 1;
       }
@@ -80,35 +84,35 @@ std::pair< double, double > muh::getAreas(
     const muh::circle_t &shapes, const size_t threads, const size_t tries, const size_t seed)
 {
   std::pair< double, double > results = {0.0, 0.0};
-  const size_t countOfTriesForThread = tries / (threads + 1);
-  const size_t remainingOnes = tries % (threads + 1);
+  const size_t count_of_tries_for_thread = tries / (threads + 1);
+  const size_t remaining = tries % (threads + 1);
   std::vector< std::future< std::pair< size_t, size_t > > > futures;
-  const double yMax = muh::getMaxYAmongShapes(shapes);
-  const double yMin = muh::getMinYAmongShapes(shapes);
-  double xMax = muh::getMaxXAmongShapes(shapes);
-  double xMin = muh::getMinXAmongShapes(shapes);
-  const double step = (xMax - xMin) / (threads + 1);
-  xMax = xMin + step;
+  const double y_max = muh::getMaxYAmongShapes(shapes);
+  const double y_min = muh::getMinYAmongShapes(shapes);
+  double x_max = muh::getMaxXAmongShapes(shapes);
+  double x_min = muh::getMinXAmongShapes(shapes);
+  const double step = (x_max - x_min) / (threads + 1);
+  x_max = x_min + step;
   for (size_t i = 1; i < threads + 1; ++i)
   {
-    xMin = xMax;
-    xMax += step;
-    futures.push_back(std::async(std::launch::async, muh::getCountOfPoints, std::ref(shapes), countOfTriesForThread,
-        seed, xMax, xMin, yMax, yMin));
+    x_min = x_max;
+    x_max += step;
+    futures.push_back(std::async(std::launch::async, muh::getCountOfPoints, std::ref(shapes),
+        count_of_tries_for_thread, seed, x_max, x_min, y_max, y_min));
   }
-  xMin = muh::getMinXAmongShapes(shapes);
-  xMax = xMin + step;
+  x_min = muh::getMinXAmongShapes(shapes);
+  x_max = x_min + step;
   std::pair< size_t, size_t > count
-      = muh::getCountOfPoints(shapes, countOfTriesForThread + remainingOnes, seed, xMax, xMin, yMax, yMin);
+      = muh::getCountOfPoints(shapes, count_of_tries_for_thread + remaining, seed, x_max, x_min, y_max, y_min);
   for (size_t i = 0; i < threads; ++i)
   {
-    std::pair< size_t, size_t > r = futures[i].get();
+    const std::pair< size_t, size_t > r = futures[i].get();
     count.first += r.first;
     count.second += r.second;
   }
-  xMax = muh::getMaxXAmongShapes(shapes);
-  const double boxArea = (yMax - yMin) * (xMax - xMin);
-  results.first = boxArea * static_cast< double >(count.first) / tries;
-  results.second = boxArea * static_cast< double >(count.second) / tries;
+  x_max = muh::getMaxXAmongShapes(shapes);
+  const double box_area = (y_max - y_min) * (x_max - x_min);
+  results.first = box_area * static_cast< double >(count.first) / tries;
+  results.second = box_area * static_cast< double >(count.second) / tries;
   return results;
 }
