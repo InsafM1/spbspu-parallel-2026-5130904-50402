@@ -1,5 +1,3 @@
-#include "monte_carlo.hpp"
-#include "shapes.hpp"
 #include "../common/shapes.hpp"
 #include "../common/monte_carlo.hpp"
 #include <cstddef>
